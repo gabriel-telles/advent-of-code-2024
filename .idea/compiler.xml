@@ -5,6 +5,9 @@
       <module name="day01" target="23" />
       <module name="day01.main" target="23" />
       <module name="day01.test" target="23" />
+      <module name="day02" target="23" />
+      <module name="day02.main" target="23" />
+      <module name="day02.test" target="23" />
     </bytecodeTargetLevel>
   </component>
 </project>

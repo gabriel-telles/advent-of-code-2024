@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/day02/src/main/resources/inputData.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
