@@ -11,6 +11,9 @@
       <module name="day03" target="23" />
       <module name="day03.main" target="23" />
       <module name="day03.test" target="23" />
+      <module name="day04" target="23" />
+      <module name="day04.main" target="23" />
+      <module name="day04.test" target="23" />
     </bytecodeTargetLevel>
   </component>
 </project>
