@@ -3,7 +3,7 @@ package com.gabrieltelles.adventofcode2024.day04;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -65,11 +65,11 @@ public class Day04 {
 
     private static List<String> transpose(List<String> input) {
         if (input.isEmpty()) {
-            return new ArrayList<>();
+            return new LinkedList<>();
         }
 
         int stringLength = input.getFirst().length();
-        List<String> transposed = new ArrayList<>();
+        List<String> transposed = new LinkedList<>();
 
         for (int i = 0; i < stringLength; i++) {
             StringBuilder sb = new StringBuilder();

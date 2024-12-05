@@ -80,4 +80,26 @@ class Day04Test {
                 Arguments.of(List.of("XX.SS","MM.AA","AA.MM","SS.XX"), 4)
         );
     }
+
+    @ParameterizedTest
+    @MethodSource
+    void shouldCountDiagonal(List<String> lines, int expectedCount) {
+        int actualCount = Day04.countDiagonal(lines, PATTERN);
+
+        Assertions.assertEquals(expectedCount, actualCount);
+    }
+
+    private static Stream<Arguments> shouldCountDiagonal() {
+        return Stream.of(
+                Arguments.of(List.of(), 0),
+                Arguments.of(List.of(""), 0),
+                Arguments.of(List.of("XMAS"), 0),
+                Arguments.of(List.of("","","",""), 0),
+                Arguments.of(List.of("X","M","A","S"), 0),
+                Arguments.of(List.of("X...",".M..","..A.","...S"), 1),
+                Arguments.of(List.of("S...",".A..","..M.","...X"), 1),
+                Arguments.of(List.of("X..X",".MM.",".AA.","S..S"), 2),
+                Arguments.of(List.of("XXXXXX","MMMMMM","AAAAAA","SSSSSS"), 6)
+        );
+    }
 }
