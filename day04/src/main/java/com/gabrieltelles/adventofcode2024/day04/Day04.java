@@ -3,6 +3,7 @@ package com.gabrieltelles.adventofcode2024.day04;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -49,7 +50,65 @@ public class Day04 {
     }
 
     static int countDiagonal(List<String> input, Pattern pattern) {
-        return 0;
+        int diagonalCount = 0;
+        List<String> mainDiagonals = getMainDiagonals(input);
+        List<String> antiDiagonals = getAntiDiagonals(input);
+        for (var diagonal : mainDiagonals) {
+            diagonalCount += countOccurrencesIn(diagonal, pattern);
+        }
+        for (var diagonal : antiDiagonals) {
+            diagonalCount += countOccurrencesIn(diagonal, pattern);
+        }
+        System.out.println("Diagonals: " + diagonalCount);
+        return diagonalCount;
+    }
+
+    public static List<String> getMainDiagonals(List<String> matrix) {
+        int numRows = matrix.size();
+        int numCols = matrix.getFirst().length();
+        List<StringBuilder> diagonals = new ArrayList<>();
+
+        for (int i = 0; i < numRows + numCols - 1; i++) {
+            diagonals.add(new StringBuilder());
+        }
+
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                int index = row - col + (numCols - 1); // Adjust to non-negative index
+                diagonals.get(index).append(matrix.get(row).charAt(col));
+            }
+        }
+
+        List<String> result = new ArrayList<>();
+        for (StringBuilder diagonal : diagonals) {
+            result.add(diagonal.toString());
+        }
+
+        return result;
+    }
+
+    public static List<String> getAntiDiagonals(List<String> matrix) {
+        int numRows = matrix.size();
+        int numCols = matrix.getFirst().length();
+        List<StringBuilder> diagonals = new ArrayList<>();
+
+        for (int i = 0; i < numRows + numCols - 1; i++) {
+            diagonals.add(new StringBuilder());
+        }
+
+        for (int row = 0; row < numRows; row++) {
+            for (int col = 0; col < numCols; col++) {
+                int index = row + col;
+                diagonals.get(index).append(matrix.get(row).charAt(col));
+            }
+        }
+
+        List<String> result = new LinkedList<>();
+        for (StringBuilder diagonal : diagonals) {
+            result.add(diagonal.toString());
+        }
+
+        return result;
     }
 
     private static int countOccurrencesIn(String line, Pattern pattern) {

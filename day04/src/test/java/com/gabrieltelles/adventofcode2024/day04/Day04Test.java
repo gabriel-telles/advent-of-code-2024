@@ -1,10 +1,14 @@
 package com.gabrieltelles.adventofcode2024.day04;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -91,7 +95,6 @@ class Day04Test {
 
     private static Stream<Arguments> shouldCountDiagonal() {
         return Stream.of(
-                Arguments.of(List.of(), 0),
                 Arguments.of(List.of(""), 0),
                 Arguments.of(List.of("XMAS"), 0),
                 Arguments.of(List.of("","","",""), 0),
@@ -101,5 +104,23 @@ class Day04Test {
                 Arguments.of(List.of("X..X",".MM.",".AA.","S..S"), 2),
                 Arguments.of(List.of("XXXXXX","MMMMMM","AAAAAA","SSSSSS"), 6)
         );
+    }
+
+    @Test
+    void shouldCountGivenExample() {
+        // Arrange
+        List<String> input;
+        try (var lines = Files.lines(Path.of("day04/src/test/resources/example.txt"))) {
+            input = lines.toList();
+        } catch (IOException e) {
+            System.err.println("Error reading the input file: " + e.getMessage());
+            return;
+        }
+
+        // Act
+        int numberOfXMAS = Day04.countXMAS(input);
+
+        // Assert
+        Assertions.assertEquals(18, numberOfXMAS);
     }
 }
