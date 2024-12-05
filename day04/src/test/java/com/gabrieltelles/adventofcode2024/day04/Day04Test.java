@@ -58,4 +58,26 @@ class Day04Test {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource
+    void shouldCountVertical(List<String> lines, int expectedVerticalCount) {
+        int actualVerticalCount = Day04.countVertical(lines, PATTERN);
+
+        Assertions.assertEquals(expectedVerticalCount, actualVerticalCount);
+    }
+
+    private static Stream<Arguments> shouldCountVertical() {
+        return Stream.of(
+                Arguments.of(List.of(), 0),
+                Arguments.of(List.of(""), 0),
+                Arguments.of(List.of("XMAS"), 0),
+                Arguments.of(List.of("","","",""), 0),
+                Arguments.of(List.of("X","X","X","X"), 0),
+                Arguments.of(List.of("X","M","A","S"), 1),
+                Arguments.of(List.of("S","A","M","X"), 1),
+                Arguments.of(List.of("X","M","A","S","A","M","X"), 2),
+                Arguments.of(List.of("XX","MM","AA","SS"), 2),
+                Arguments.of(List.of("XX.SS","MM.AA","AA.MM","SS.XX"), 4)
+        );
+    }
 }

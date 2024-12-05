@@ -3,6 +3,7 @@ package com.gabrieltelles.adventofcode2024.day04;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -28,13 +29,27 @@ public class Day04 {
         return countHorizontal(input, pattern) + countVertical(input, pattern) + countDiagonal(input,pattern);
     }
 
-    static int countHorizontal(List<String> lines, Pattern pattern) {
-        int totalCount = 0;
-        for (var line : lines) {
-            totalCount += countOccurrencesIn(line, pattern);
+    static int countHorizontal(List<String> input, Pattern pattern) {
+        int horizontalCount = 0;
+        for (var line : input) {
+            horizontalCount += countOccurrencesIn(line, pattern);
         }
-        System.out.println("Horizontal: " + totalCount);
-        return totalCount;
+        System.out.println("Horizontal: " + horizontalCount);
+        return horizontalCount;
+    }
+
+    static int countVertical(List<String> input, Pattern pattern) {
+        int verticalCount = 0;
+        List<String> transposedInput = transpose(input);
+        for (var column : transposedInput) {
+            verticalCount += countOccurrencesIn(column, pattern);
+        }
+        System.out.println("Vertical: " + verticalCount);
+        return verticalCount;
+    }
+
+    static int countDiagonal(List<String> input, Pattern pattern) {
+        return 0;
     }
 
     private static int countOccurrencesIn(String line, Pattern pattern) {
@@ -48,11 +63,22 @@ public class Day04 {
         return count;
     }
 
-    static int countVertical(List<String> input, Pattern pattern) {
-        return 0;
-    }
+    private static List<String> transpose(List<String> input) {
+        if (input.isEmpty()) {
+            return new ArrayList<>();
+        }
 
-    static int countDiagonal(List<String> input, Pattern pattern) {
-        return 0;
+        int stringLength = input.getFirst().length();
+        List<String> transposed = new ArrayList<>();
+
+        for (int i = 0; i < stringLength; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (String str : input) {
+                sb.append(str.charAt(i));
+            }
+            transposed.add(sb.toString());
+        }
+
+        return transposed;
     }
 }
