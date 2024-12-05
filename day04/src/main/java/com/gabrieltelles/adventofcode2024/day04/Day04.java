@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Day04 {
     private static final String INPUT_PATH = "day04/src/main/resources/inputData.txt";
+    private static final String XMAS_REGEX = "XMAS|SAMX";
+    public static final Pattern PATTERN = Pattern.compile(XMAS_REGEX);
 
     public static void main(String[] args) {
         List<String> input;
@@ -25,119 +28,91 @@ public class Day04 {
     }
 
     static int countXMAS(List<String> input) {
-        String regex = "XMAS|SAMX";
-        var pattern = Pattern.compile(regex);
-        return countHorizontal(input, pattern) + countVertical(input, pattern) + countDiagonal(input,pattern);
+        return countHorizontalOccurrences(input, PATTERN) + countVerticalOccurrences(input, PATTERN) + countDiagonalOccurrences(input, PATTERN);
     }
 
-    static int countHorizontal(List<String> input, Pattern pattern) {
+    static int countHorizontalOccurrences(List<String> input, Pattern pattern) {
         int horizontalCount = 0;
         for (var line : input) {
-            horizontalCount += countOccurrencesIn(line, pattern);
+            horizontalCount += countOccurrences(line, pattern);
         }
         System.out.println("Horizontal: " + horizontalCount);
         return horizontalCount;
     }
 
-    static int countVertical(List<String> input, Pattern pattern) {
+    static int countVerticalOccurrences(List<String> input, Pattern pattern) {
         int verticalCount = 0;
-        List<String> transposedInput = transpose(input);
+        List<String> transposedInput = transposeMatrix(input);
         for (var column : transposedInput) {
-            verticalCount += countOccurrencesIn(column, pattern);
+            verticalCount += countOccurrences(column, pattern);
         }
         System.out.println("Vertical: " + verticalCount);
         return verticalCount;
     }
 
-    static int countDiagonal(List<String> input, Pattern pattern) {
+    static int countDiagonalOccurrences(List<String> input, Pattern pattern) {
+        List<String> mainDiagonals = extractDiagonals(input, true);
+        List<String> antiDiagonals = extractDiagonals(input, false);
+
         int diagonalCount = 0;
-        List<String> mainDiagonals = getMainDiagonals(input);
-        List<String> antiDiagonals = getAntiDiagonals(input);
         for (var diagonal : mainDiagonals) {
-            diagonalCount += countOccurrencesIn(diagonal, pattern);
+            diagonalCount += countOccurrences(diagonal, pattern);
         }
         for (var diagonal : antiDiagonals) {
-            diagonalCount += countOccurrencesIn(diagonal, pattern);
+            diagonalCount += countOccurrences(diagonal, pattern);
         }
         System.out.println("Diagonals: " + diagonalCount);
         return diagonalCount;
     }
 
-    public static List<String> getMainDiagonals(List<String> matrix) {
-        int numRows = matrix.size();
-        int numCols = matrix.getFirst().length();
-        List<StringBuilder> diagonals = new ArrayList<>();
-
-        for (int i = 0; i < numRows + numCols - 1; i++) {
-            diagonals.add(new StringBuilder());
-        }
-
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++) {
-                int index = row - col + (numCols - 1); // Adjust to non-negative index
-                diagonals.get(index).append(matrix.get(row).charAt(col));
-            }
-        }
-
-        List<String> result = new ArrayList<>();
-        for (StringBuilder diagonal : diagonals) {
-            result.add(diagonal.toString());
-        }
-
-        return result;
-    }
-
-    public static List<String> getAntiDiagonals(List<String> matrix) {
-        int numRows = matrix.size();
-        int numCols = matrix.getFirst().length();
-        List<StringBuilder> diagonals = new ArrayList<>();
-
-        for (int i = 0; i < numRows + numCols - 1; i++) {
-            diagonals.add(new StringBuilder());
-        }
-
-        for (int row = 0; row < numRows; row++) {
-            for (int col = 0; col < numCols; col++) {
-                int index = row + col;
-                diagonals.get(index).append(matrix.get(row).charAt(col));
-            }
-        }
-
-        List<String> result = new LinkedList<>();
-        for (StringBuilder diagonal : diagonals) {
-            result.add(diagonal.toString());
-        }
-
-        return result;
-    }
-
-    private static int countOccurrencesIn(String line, Pattern pattern) {
+    private static int countOccurrences(String line, Pattern pattern) {
         var matcher = pattern.matcher(line);
-        int from = 0;
         int count = 0;
-        while(matcher.find(from)) {
+        int start = 0;
+        while (matcher.find(start)) {
             count++;
-            from = matcher.start() + 1;
+            start = matcher.start() + 1;
         }
         return count;
     }
 
-    private static List<String> transpose(List<String> input) {
-        if (input.isEmpty()) {
+    private static List<String> transposeMatrix(List<String> matrix) {
+        if (matrix.isEmpty()) {
             return new LinkedList<>();
         }
 
-        int stringLength = input.getFirst().length();
+        int cols = matrix.getFirst().length();
         List<String> transposed = new LinkedList<>();
 
-        for (int i = 0; i < stringLength; i++) {
+        for (int col = 0; col < cols; col++) {
             StringBuilder sb = new StringBuilder();
-            for (String str : input) {
-                sb.append(str.charAt(i));
+            for (String row : matrix) {
+                sb.append(row.charAt(col));
             }
             transposed.add(sb.toString());
         }
-
         return transposed;
+    }
+
+    private static List<String> extractDiagonals(List<String> matrix, boolean isMain) {
+        int rows = matrix.size();
+        int cols = matrix.getFirst().length();
+        int numDiagonals = rows + cols - 1;
+        List<StringBuilder> diagonals = new ArrayList<>();
+
+        for (int i = 0; i < numDiagonals; i++) {
+            diagonals.add(new StringBuilder());
+        }
+
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int index = isMain ? row - col + cols - 1 : row + col;
+                diagonals.get(index).append(matrix.get(row).charAt(col));
+            }
+        }
+
+        return diagonals.stream()
+                .map(StringBuilder::toString)
+                .collect(Collectors.toList());
     }
 }

@@ -20,13 +20,13 @@ class Day04Test {
 
     @ParameterizedTest
     @MethodSource
-    void shouldCountHorizontalForSingleLine(String line, int expectedHorizontalCount) {
-        int actualHorizontalCount = Day04.countHorizontal(List.of(line), PATTERN);
+    void shouldCountHorizontalOccurrencesForSingleLine(String line, int expectedHorizontalCount) {
+        int actualHorizontalCount = Day04.countHorizontalOccurrences(List.of(line), PATTERN);
 
         Assertions.assertEquals(expectedHorizontalCount, actualHorizontalCount);
     }
 
-    private static Stream<Arguments> shouldCountHorizontalForSingleLine() {
+    private static Stream<Arguments> shouldCountHorizontalOccurrencesForSingleLine() {
         return Stream.of(
                 Arguments.of("", 0),
                 Arguments.of("XMA", 0),
@@ -43,13 +43,13 @@ class Day04Test {
 
     @ParameterizedTest
     @MethodSource
-    void shouldCountHorizontalForMultipleLineS(List<String> lines, int expectedHorizontalCount) {
-        int actualHorizontalCount = Day04.countHorizontal(lines, PATTERN);
+    void shouldCountHorizontalOccurrencesForMultipleLines(List<String> lines, int expectedHorizontalCount) {
+        int actualHorizontalCount = Day04.countHorizontalOccurrences(lines, PATTERN);
 
         Assertions.assertEquals(expectedHorizontalCount, actualHorizontalCount);
     }
 
-    private static Stream<Arguments> shouldCountHorizontalForMultipleLineS() {
+    private static Stream<Arguments> shouldCountHorizontalOccurrencesForMultipleLines() {
         return Stream.of(
                 Arguments.of(List.of(), 0),
                 Arguments.of(List.of(""), 0),
@@ -64,13 +64,13 @@ class Day04Test {
 
     @ParameterizedTest
     @MethodSource
-    void shouldCountVertical(List<String> lines, int expectedVerticalCount) {
-        int actualVerticalCount = Day04.countVertical(lines, PATTERN);
+    void shouldCountVerticalOccurrences(List<String> lines, int expectedVerticalCount) {
+        int actualVerticalCount = Day04.countVerticalOccurrences(lines, PATTERN);
 
         Assertions.assertEquals(expectedVerticalCount, actualVerticalCount);
     }
 
-    private static Stream<Arguments> shouldCountVertical() {
+    private static Stream<Arguments> shouldCountVerticalOccurrences() {
         return Stream.of(
                 Arguments.of(List.of(), 0),
                 Arguments.of(List.of(""), 0),
@@ -87,13 +87,13 @@ class Day04Test {
 
     @ParameterizedTest
     @MethodSource
-    void shouldCountDiagonal(List<String> lines, int expectedCount) {
-        int actualCount = Day04.countDiagonal(lines, PATTERN);
+    void shouldCountDiagonalOccurrences(List<String> lines, int expectedCount) {
+        int actualCount = Day04.countDiagonalOccurrences(lines, PATTERN);
 
         Assertions.assertEquals(expectedCount, actualCount);
     }
 
-    private static Stream<Arguments> shouldCountDiagonal() {
+    private static Stream<Arguments> shouldCountDiagonalOccurrences() {
         return Stream.of(
                 Arguments.of(List.of(""), 0),
                 Arguments.of(List.of("XMAS"), 0),
