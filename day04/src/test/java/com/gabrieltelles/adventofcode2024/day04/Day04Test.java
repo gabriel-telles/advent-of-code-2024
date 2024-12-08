@@ -110,7 +110,7 @@ class Day04Test {
     void shouldCountGivenExample() {
         // Arrange
         List<String> input;
-        try (var lines = Files.lines(Path.of("day04/src/test/resources/example.txt"))) {
+        try (var lines = Files.lines(Path.of("src/test/resources/example.txt"))) {
             input = lines.toList();
         } catch (IOException e) {
             System.err.println("Error reading the input file: " + e.getMessage());
