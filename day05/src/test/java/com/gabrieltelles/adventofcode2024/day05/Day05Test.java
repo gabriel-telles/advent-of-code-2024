@@ -10,11 +10,11 @@ class Day05Test {
 
     @Test
     void shouldGetMiddlePageSum() {
-        SetMultimap<String, String> rules = Day05.getRules("src/test/resources/exampleRules.csv");
-        List<List<String>> updates = Day05.getUpdates("src/test/resources/exampleUpdates.csv");
+        SetMultimap<String, String> rules = Day05.loadRules("src/test/resources/exampleRules.csv");
+        List<List<String>> updates = Day05.loadUpdates("src/test/resources/exampleUpdates.csv");
         if (rules == null || updates == null) return;
 
-        List<List<String>> validUpdates = updates.stream().filter(up -> Day05.updateRespectRules(up, rules)).toList();
+        List<List<String>> validUpdates = updates.stream().filter(up -> Day05.isUpdateValid(up, rules)).toList();
         int middlePageSum = validUpdates.stream().mapToInt(up -> Integer.parseInt(up.get((up.size()-1)/2))).sum();
 
         Assertions.assertEquals(143, middlePageSum);

@@ -18,17 +18,17 @@ public class Day05 {
     private static final String UPDATES_DELIMITER = ",";
 
     public static void main(String[] args) {
-        SetMultimap<String, String> rules = getRules(RULES_PATH);
-        List<List<String>> updates = getUpdates(UPDATES_PATH);
+        SetMultimap<String, String> rules = loadRules(RULES_PATH);
+        List<List<String>> updates = loadUpdates(UPDATES_PATH);
         if (rules == null || updates == null) return;
 
-        List<List<String>> validUpdates = updates.stream().filter(up -> updateRespectRules(up, rules)).toList();
-        int middlePageSum = validUpdates.stream().mapToInt(up -> Integer.parseInt(up.get((up.size()-1)/2))).sum();
+        List<List<String>> validUpdates = updates.stream().filter(up -> isUpdateValid(up, rules)).toList();
+        int middlePageSum = validUpdates.stream().mapToInt(Day05::getMiddleElement).sum();
 
-        System.out.println(middlePageSum);
+        System.out.println("Middle page sum for Valid updates: " + middlePageSum);
     }
 
-    static boolean updateRespectRules(List<String> update, SetMultimap<String, String> rules) {
+    static boolean isUpdateValid(List<String> update, SetMultimap<String, String> rules) {
         ListIterator<String> iterator = update.listIterator(update.size());
         List<String> successors = new LinkedList<>();
         while (iterator.hasPrevious()) {
@@ -43,7 +43,12 @@ public class Day05 {
         return true;
     }
 
-    static SetMultimap<String, String> getRules(String path) {
+    static int getMiddleElement(List<String> update) {
+        int middleIndex = (update.size() - 1) / 2;
+        return Integer.parseInt(update.get(middleIndex));
+    }
+
+    static SetMultimap<String, String> loadRules(String path) {
         SetMultimap<String, String> rules = HashMultimap.create();
         try (var lines = Files.lines(Paths.get(path))) {
             lines.map(line -> line.split(RULES_DELIMITER))
@@ -55,7 +60,7 @@ public class Day05 {
         return rules;
     }
 
-    static List<List<String>> getUpdates(String path) {
+    static List<List<String>> loadUpdates(String path) {
         List<List<String>> updates;
         try (var lines = Files.lines(Paths.get(path))) {
             updates = lines.map(line -> List.of(line.split(UPDATES_DELIMITER))).toList();
