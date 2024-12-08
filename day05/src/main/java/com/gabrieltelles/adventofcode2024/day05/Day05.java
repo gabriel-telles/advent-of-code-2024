@@ -6,9 +6,7 @@ import com.google.common.collect.SetMultimap;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class Day05 {
     private static final String RULES_PATH = "day05/src/main/resources/rules.csv";
@@ -24,8 +22,12 @@ public class Day05 {
 
         List<List<String>> validUpdates = updates.stream().filter(up -> isUpdateValid(up, rules)).toList();
         int middlePageSum = validUpdates.stream().mapToInt(Day05::getMiddleElement).sum();
-
         System.out.println("Middle page sum for Valid updates: " + middlePageSum);
+
+        List<List<String>> invalidUpdates = updates.stream().filter(up -> !isUpdateValid(up, rules)).toList();
+        List<List<String>> fixedUpdates = fixInvalidUpdates(invalidUpdates, rules);
+        int fixedInvalidMiddlePageSum = fixedUpdates.stream().mapToInt(Day05::getMiddleElement).sum();
+        System.out.println("Middle page sum for Invalid and Fixed updates: " + fixedInvalidMiddlePageSum);
     }
 
     static boolean isUpdateValid(List<String> update, SetMultimap<String, String> rules) {
@@ -46,6 +48,28 @@ public class Day05 {
     static int getMiddleElement(List<String> update) {
         int middleIndex = (update.size() - 1) / 2;
         return Integer.parseInt(update.get(middleIndex));
+    }
+
+    static List<List<String>> fixInvalidUpdates(List<List<String>> invalidUpdates, SetMultimap<String, String> rules) {
+        List<List<String>> fixedUpdates = new LinkedList<>();
+        for (var update : invalidUpdates) {
+            List<String> fixedUpdate = new ArrayList<>(update);
+            while (!isUpdateValid(fixedUpdate, rules)) {
+                for (int i = fixedUpdate.size() - 1; i >= 0; i--) {
+                    String element = fixedUpdate.get(i);
+                    boolean flag = true;
+                    for (int j = i; j  < fixedUpdate.size(); j++) {
+                        if (rules.get(element).contains(fixedUpdate.get(j)) && flag) {
+                            Collections.swap(fixedUpdate, i, j);
+                            flag = false;
+                        }
+                    }
+                }
+            }
+
+            fixedUpdates.add(fixedUpdate);
+        }
+        return fixedUpdates;
     }
 
     static SetMultimap<String, String> loadRules(String path) {
