@@ -17,6 +17,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/day05/src/main/resources/rules.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/day05/src/main/resources/updates.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>
