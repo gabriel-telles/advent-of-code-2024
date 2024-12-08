@@ -123,4 +123,22 @@ class Day04Test {
         // Assert
         Assertions.assertEquals(18, numberOfXMAS);
     }
+
+    @Test
+    void shouldCount_X_MAS_GivenExample() {
+        // Arrange
+        List<String> input;
+        try (var lines = Files.lines(Path.of("src/test/resources/example.txt"))) {
+            input = lines.toList();
+        } catch (IOException e) {
+            System.err.println("Error reading the input file: " + e.getMessage());
+            return;
+        }
+
+        // Act
+        int numberOfX_MAS = Day04.countX_MAS(input);
+
+        // Assert
+        Assertions.assertEquals(9, numberOfX_MAS);
+    }
 }

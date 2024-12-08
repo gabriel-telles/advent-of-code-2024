@@ -13,6 +13,8 @@ public class Day04 {
     private static final String INPUT_PATH = "day04/src/main/resources/inputData.txt";
     private static final String XMAS_REGEX = "XMAS|SAMX";
     public static final Pattern PATTERN = Pattern.compile(XMAS_REGEX);
+    private static final String X_MAS_REGEX = "(M.M.A.S.S)|(M.S.A.M.S)|(S.M.A.S.M)|(S.S.A.M.M)";
+    public static final Pattern X_MAS_PATTERN = Pattern.compile(X_MAS_REGEX);
 
     public static void main(String[] args) {
         List<String> input;
@@ -25,6 +27,9 @@ public class Day04 {
 
         int numberOfXMAS = countXMAS(input);
         System.out.println("Total: " + numberOfXMAS);
+
+        int numberOfX_MAS = countX_MAS(input);
+        System.out.println("Count of X-MAS: " + numberOfX_MAS);
     }
 
     static int countXMAS(List<String> input) {
@@ -63,6 +68,32 @@ public class Day04 {
         }
         System.out.println("Diagonals: " + diagonalCount);
         return diagonalCount;
+    }
+
+    static int countX_MAS(List<String> input) {
+        var squares = get3x3squares(input);
+        int squareCount = 0;
+        for (var square : squares) {
+            squareCount += countOccurrences(square, X_MAS_PATTERN);
+        }
+        return  squareCount;
+    }
+
+    private static List<String> get3x3squares(List<String> matrix) {
+        List<String> result = new ArrayList<>();
+        int width = matrix.getFirst().length();
+
+        for (int i = 0; i <= matrix.size() - 3; i++) {
+            for (int j = 0; j <= width - 3; j++) {
+                StringBuilder square = new StringBuilder(9);
+                for (int k = 0; k < 3; k++) {
+                    square.append(matrix.get(i + k), j, j + 3);
+                }
+                result.add(square.toString());
+            }
+        }
+
+        return result;
     }
 
     private static int countOccurrences(String line, Pattern pattern) {
