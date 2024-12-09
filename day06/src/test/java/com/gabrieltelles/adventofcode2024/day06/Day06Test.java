@@ -10,7 +10,12 @@ class Day06Test {
     @Test
     void shouldTraverseExampleMap() {
         var puzzleMap = PuzzleMap.from(EXAMPLE_MAP_PATH);
-        while (puzzleMap.moveGuard()) {}
+        while (puzzleMap.checkMovementState() == PuzzleMap.MovementState.MOVABLE) {
+            puzzleMap.moveGuard();
+        }
+        if (puzzleMap.checkMovementState() == PuzzleMap.MovementState.FINISH) {
+            puzzleMap.moveGuard();
+        }
         int visitedPositions = puzzleMap.countVisitedPositions();
 
         Assertions.assertEquals(41, visitedPositions);

@@ -5,7 +5,12 @@ public class Day06 {
 
     public static void main(String[] args) {
         var puzzleMap = PuzzleMap.from(MAP_PATH);
-        while (puzzleMap.moveGuard()) {}
+        while (puzzleMap.checkMovementState() == PuzzleMap.MovementState.MOVABLE) {
+            puzzleMap.moveGuard();
+        }
+        if (puzzleMap.checkMovementState() == PuzzleMap.MovementState.FINISH) {
+            puzzleMap.moveGuard();
+        }
         int visitedPositions = puzzleMap.countVisitedPositions();
         System.out.println(visitedPositions);
     }

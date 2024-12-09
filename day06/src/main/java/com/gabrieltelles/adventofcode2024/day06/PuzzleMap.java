@@ -7,8 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PuzzleMap {
-    public static final char OBSTACLE = '#';
-    public static final char VISITED = 'X';
+
+    public enum MovementState {
+        MOVABLE,
+        FINISH,
+    }
+
+    private static final char OBSTACLE = '#';
+    private static final char VISITED = 'X';
 
     private final char[][] map;
     private final int height;
@@ -22,21 +28,30 @@ public class PuzzleMap {
         this.guard = guard;
     }
 
-    public boolean moveGuard() {
+    public MovementState checkMovementState() {
         var nextPosition = guard.getNextPosition();
         if (isOutOfBounds(nextPosition)) {
+            return MovementState.FINISH;
+        }
+        return MovementState.MOVABLE;
+    }
+
+    public void moveGuard() {
+        MovementState state = checkMovementState();
+        if (state == MovementState.FINISH) {
             walkedOn(guard.getPosition());
-            return false;
+            return;
         }
 
-        if (charAt(nextPosition) == OBSTACLE) {
-            guard.changeOrientation();
-        } else {
-            walkedOn(guard.getPosition());
-            guard.moveForward();
+        if (state == MovementState.MOVABLE) {
+            if (charAt(guard.getNextPosition()) == OBSTACLE) {
+                guard.changeOrientation();
+            } else {
+                walkedOn(guard.getPosition());
+                guard.moveForward();
+            }
         }
         updateGuard(guard);
-        return true;
     }
 
     private void updateGuard(Guard guard) {
