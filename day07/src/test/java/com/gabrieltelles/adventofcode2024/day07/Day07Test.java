@@ -31,7 +31,7 @@ class Day07Test {
         long result = Day07.getSumOfAcceptableEquations(equations);
 
         // Assert
-        assertEquals(3749L, result);
+        assertEquals(11387L, result);
     }
 
 }

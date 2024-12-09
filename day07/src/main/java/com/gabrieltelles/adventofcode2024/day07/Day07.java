@@ -25,7 +25,8 @@ public class Day07 {
         int numOperations = equation.length - 2;
         Operation[] operations = new Operation[numOperations];
         Arrays.fill(operations, Operation.ADD);
-        for (int i = 0; i < (1 << numOperations); i++) {
+        int totalCombinations = (int) Math.pow(3, numOperations);
+        for (int i = 0; i < totalCombinations; i++) {
             if (evaluatesTo(equation, operations)) {
                 return true;
             }
@@ -37,11 +38,16 @@ public class Day07 {
     static Operation[] next(Operation[] current) {
         Operation[] next = Arrays.copyOf(current, current.length);
         for (int i = current.length - 1; i >= 0; i--) {
-            if (next[i] == Operation.ADD) {
-                next[i] = Operation.MULTIPLY;
-                break;
-            } else {
-                next[i] = Operation.ADD;
+            switch (next[i]) {
+                case ADD -> {
+                    next[i] = Operation.MULTIPLY;
+                    return next;
+                }
+                case MULTIPLY -> {
+                    next[i] = Operation.CONCAT;
+                    return next;
+                }
+                case CONCAT -> next[i] = Operation.ADD;
             }
         }
         return next;
@@ -71,7 +77,8 @@ public class Day07 {
 
     enum Operation {
         ADD("+", Long::sum),
-        MULTIPLY("*", (x, y) -> x * y);
+        MULTIPLY("*", (x, y) -> x * y),
+        CONCAT("|", (x, y) -> Long.parseLong(Long.toString(x) + Long.toString(y)));
 
         private final String symbol;
         private final LongBinaryOperator op;
