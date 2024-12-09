@@ -23,7 +23,7 @@ public class PuzzleMap {
     private final char[][] map;
     private final Guard guard;
 
-    private final Map<int[], Character> guardPath = new HashMap<>();
+    private final Map<List<Integer>, Character> guardPath = new HashMap<>();
 
     private PuzzleMap(char[][] map, Guard guard) {
         this.map = map;
@@ -43,7 +43,7 @@ public class PuzzleMap {
         if (isOutOfBounds(nextPosition)) {
             return MovementState.FINISH;
         }
-        if (isInLoop()) {
+        if (willLoop()) {
             return MovementState.LOOPED;
         }
         return MovementState.MOVABLE;
@@ -61,7 +61,9 @@ public class PuzzleMap {
                 guard.changeOrientation();
             } else {
                 walkedOn(guard.getPosition());
-                guardPath.put(guard.getPosition(), guard.getOrientation());
+                if (!guardPath.containsKey(Arrays.stream(guard.getPosition()).boxed().toList())) {
+                    guardPath.put(Arrays.stream(guard.getPosition()).boxed().toList(), guard.getOrientation());
+                }
                 guard.moveForward();
             }
         }
@@ -82,11 +84,15 @@ public class PuzzleMap {
         return position[0] < 0 || position[0] >= height || position[1] < 0 || position[1] >= width;
     }
 
-    private boolean isInLoop() {
-        if (charAt(guard.getPosition()) != VISITED) {
+    private boolean willLoop() {
+        if (charAt(guard.getNextPosition()) != VISITED) {
             return false;
         }
-        return guardPath.get(guard.getPosition()) == guard.getOrientation();
+        var orientation = guardPath.get(Arrays.stream(guard.getPosition()).boxed().toList());
+        if (orientation == null) {
+            return false;
+        }
+        return orientation == guard.getOrientation();
     }
 
     private char charAt(int[] position) {
