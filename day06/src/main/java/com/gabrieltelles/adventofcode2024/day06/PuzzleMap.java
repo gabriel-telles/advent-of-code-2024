@@ -13,37 +13,52 @@ public class PuzzleMap {
     private final char[][] map;
     private final int height;
     private final int width;
+    private final Guard guard;
 
-    private PuzzleMap(char[][] map) {
+    private PuzzleMap(char[][] map, Guard guard) {
         this.map = map;
         this.height = map.length;
         this.width = map[0].length;
+        this.guard = guard;
     }
 
-    public char[][] getMap() {
-        return Arrays.copyOf(map, map.length);
+    public boolean moveGuard() {
+        var nextPosition = guard.getNextPosition();
+        if (isOutOfBounds(nextPosition)) {
+            walkedOn(guard.getPosition());
+            return false;
+        }
+
+        if (charAt(nextPosition) == OBSTACLE) {
+            guard.changeOrientation();
+        } else {
+            walkedOn(guard.getPosition());
+            guard.moveForward();
+        }
+        updateGuard(guard);
+        return true;
     }
 
-    public void updateGuard(Guard guard) {
+    private void updateGuard(Guard guard) {
         var guardPosition = guard.getPosition();
         map[guardPosition[0]][guardPosition[1]] = guard.getOrientation();
     }
 
-    public boolean isInBounds(int[] position) {
+    private boolean isOutOfBounds(int[] position) {
         if (position.length != 2) {
             throw new IllegalArgumentException("Position must be a int[] of size 2");
         }
-        return position[0] >= 0 && position[0] < height && position[1] >= 0 && position[1] < width;
+        return position[0] < 0 || position[0] >= height || position[1] < 0 || position[1] >= width;
     }
 
-    public char charAt(int[] position) {
+    private char charAt(int[] position) {
         if (position.length != 2) {
             throw new IllegalArgumentException("Position must be a int[] of size 2");
         }
         return map[position[0]][position[1]];
     }
 
-    public void walkedOn(int[] position) {
+    private void walkedOn(int[] position) {
         if (charAt(position) == OBSTACLE) {
             throw new IllegalArgumentException("Cannot walk over obstacles");
         }
@@ -51,18 +66,19 @@ public class PuzzleMap {
     }
 
     public int countVisitedPositions() {
-        int result = 0;
-        for (char[] chars : map) {
-            for (char aChar : chars) {
-                if (aChar == VISITED) {
-                    result++;
-                }
-            }
-        }
-        return result;
+        return (int) Arrays.stream(map)
+                .flatMapToInt(row -> new String(row).chars())
+                .filter(c -> c == VISITED)
+                .count();
     }
 
     public static PuzzleMap from(String path) {
+        char[][] map = loadMapFromPath(path);
+        Guard guard = Guard.from(map);
+        return new PuzzleMap(map, guard);
+    }
+
+    private static char[][] loadMapFromPath(String path) {
         char[][] map;
         try (var lines = Files.lines(Paths.get(path))) {
             List<String> tempList = lines.toList();
@@ -71,9 +87,8 @@ public class PuzzleMap {
                 map[i] = tempList.get(i).toCharArray();
             }
         } catch (IOException e) {
-            System.out.println("Failed to load " + e.getMessage());
-            return null;
+            throw new RuntimeException("Failed to load " + e.getMessage(), e);
         }
-        return new PuzzleMap(map);
+        return map;
     }
 }

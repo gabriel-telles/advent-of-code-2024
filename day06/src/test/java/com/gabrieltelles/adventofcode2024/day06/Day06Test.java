@@ -9,11 +9,8 @@ class Day06Test {
 
     @Test
     void shouldTraverseExampleMap() {
-        PuzzleMap puzzleMap = PuzzleMap.from(EXAMPLE_MAP_PATH);
-        Assertions.assertNotNull(puzzleMap);
-
-        var guard = Guard.from(puzzleMap.getMap());
-        Day06.traverseMap(puzzleMap, guard);
+        var puzzleMap = PuzzleMap.from(EXAMPLE_MAP_PATH);
+        while (puzzleMap.moveGuard()) {}
         int visitedPositions = puzzleMap.countVisitedPositions();
 
         Assertions.assertEquals(41, visitedPositions);
