@@ -11,18 +11,23 @@ import java.util.List;
 
 public class Day08 {
     static final char EMPTY = '.';
-    static final char ANTI_NODE = 'X';
+    static final char ANTI_NODE = '#';
 
     private static final String INPUT_PATH = "day08/src/main/resources/input.txt";
     public static void main(String[] args) {
         char[][] rawAntennas = loadChar2DArrayFromPath(INPUT_PATH);
 
+        // Part One
         SetMultimap<Character, Point> antennas = getAntennas(rawAntennas);
         char[][] antiNodes = getEmptyBoard(rawAntennas.length);
-
         populatePartOne(antennas, antiNodes);
+        System.out.println("Part one: " + countOccurrences(antiNodes));
 
-        System.out.println(countOccurrences(antiNodes, ANTI_NODE));
+        // Part Two
+        SetMultimap<Character, Point> antennas2 = getAntennas(rawAntennas);
+        char[][] antiNodes2 = getEmptyBoard(rawAntennas.length);
+        populatePartTwo(antennas2, antiNodes2);
+        System.out.println("Part two: " + countOccurrences(antiNodes2));
     }
 
     static void populatePartOne(SetMultimap<Character, Point> antennas, char[][] antiNodes) {
@@ -33,6 +38,27 @@ public class Day08 {
                         Point antiNode = getAntiNode(first, second);
                         if (isInBounds(antiNode, antiNodes)) {
                             antiNodes[antiNode.row()][antiNode.col()] = ANTI_NODE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static void populatePartTwo(SetMultimap<Character, Point> antennas, char[][] antiNodes) {
+        for (var frequency : antennas.keySet()) {
+            for (Point first : antennas.get(frequency)) {
+                for (Point second : antennas.get(frequency)) {
+                    antiNodes[first.row()][first.col()] = ANTI_NODE;
+                    if (first != second) {
+                        Point antiNode = getAntiNode(first, second);
+                        Point previous = second;
+                        Point temp;
+                        while (isInBounds(antiNode, antiNodes)) {
+                            antiNodes[antiNode.row()][antiNode.col()] = ANTI_NODE;
+                            temp = getAntiNode(previous, antiNode);
+                            previous = antiNode;
+                            antiNode = temp;
                         }
                     }
                 }
@@ -73,11 +99,11 @@ public class Day08 {
         return p.row() >= 0 && p.row() < height && p.col() >= 0 && p.col() < width;
     }
 
-    static int countOccurrences(char[][] array, char target) {
+    static int countOccurrences(char[][] array) {
         int count = 0;
         for (char[] row : array) {
             for (char c : row) {
-                if (c == target) {
+                if (c == Day08.ANTI_NODE) {
                     count++;
                 }
             }

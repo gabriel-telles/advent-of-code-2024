@@ -39,7 +39,7 @@ class Day08Test {
     }
 
     @Test
-    void shouldGetCorrectNumberOfAntiNodes() {
+    void shouldGetCorrectNumberOfAntiNodesPartOne() {
         char[][] rawAntennas = Day08.loadChar2DArrayFromPath(TEST_INPUT_PATH);
 
         SetMultimap<Character, Point> antennas = Day08.getAntennas(rawAntennas);
@@ -47,6 +47,18 @@ class Day08Test {
 
         Day08.populatePartOne(antennas, antiNodes);
 
-        assertEquals(14, Day08.countOccurrences(antiNodes, Day08.ANTI_NODE));
+        assertEquals(14, Day08.countOccurrences(antiNodes));
+    }
+
+    @Test
+    void shouldGetCorrectNumberOfAntiNodesPartTwo() {
+        char[][] rawAntennas = Day08.loadChar2DArrayFromPath(TEST_INPUT_PATH);
+
+        SetMultimap<Character, Point> antennas = Day08.getAntennas(rawAntennas);
+        char[][] antiNodes = Day08.getEmptyBoard(rawAntennas.length);
+
+        Day08.populatePartTwo(antennas, antiNodes);
+
+        assertEquals(34, Day08.countOccurrences(antiNodes));
     }
 }
