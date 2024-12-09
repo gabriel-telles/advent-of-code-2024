@@ -10,8 +10,8 @@ public class Day06 {
         }
         if (puzzleMap.checkMovementState() == PuzzleMap.MovementState.FINISH) {
             puzzleMap.moveGuard();
+            int visitedPositions = puzzleMap.countVisitedPositions();
+            System.out.println(visitedPositions);
         }
-        int visitedPositions = puzzleMap.countVisitedPositions();
-        System.out.println(visitedPositions);
     }
 }
