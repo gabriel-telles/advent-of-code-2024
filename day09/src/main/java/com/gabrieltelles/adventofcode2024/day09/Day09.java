@@ -3,6 +3,7 @@ package com.gabrieltelles.adventofcode2024.day09;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 public class Day09 {
 
@@ -12,16 +13,20 @@ public class Day09 {
         String diskMap = loadDiskMap(INPUT_PATH);
     }
 
-    static String decompressNotation(String diskMap) {
-        return "";
+    static List<Integer> decompressNotation(String diskMap) {
+        return null;
     }
 
-    static String compact(String disk) {
-        return "";
+    static List<Integer> compact(List<Integer> disk) {
+        return null;
     }
 
-    static long calculateChecksum(String compactedDisk) {
-        return 0L;
+    static long calculateChecksum(List<Integer> compactedDisk) {
+        long checksum = 0;
+        for (int i = 0; i < compactedDisk.size(); i ++) {
+            checksum += (long) i * compactedDisk.get(i);
+        }
+        return checksum;
     }
 
     static String loadDiskMap(String path) {
