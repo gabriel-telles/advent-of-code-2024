@@ -3,7 +3,10 @@ package com.gabrieltelles.adventofcode2024.day09;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class Day09 {
 
@@ -17,8 +20,26 @@ public class Day09 {
         return null;
     }
 
-    static List<Integer> compact(List<Integer> disk) {
-        return null;
+    static int[] compact(int[] disk) {
+        int[] result = Arrays.copyOf(disk, disk.length);
+        int left = 0;
+        int right = disk.length - 1;
+        while (left < right) {
+            while (result[left] != -1) {left++;}
+            while (result[right] == -1) {right--;}
+            if (left < right) {
+                result[left] = result[right];
+                result[right] = -1;
+            }
+        }
+        int realLength = disk.length;
+        for (int i = 0; i < result.length; i++) {
+            if (result[i] == -1) {
+                realLength = i;
+                break;
+            }
+        }
+        return Arrays.copyOf(result, realLength);
     }
 
     static long calculateChecksum(List<Integer> compactedDisk) {

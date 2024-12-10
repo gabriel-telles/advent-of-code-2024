@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day09Test {
@@ -33,18 +34,20 @@ class Day09Test {
 
     @ParameterizedTest
     @MethodSource
-    void shouldCompact(List<Integer> disk, List<Integer> expectedCompactedDisk) {
+    void shouldCompact(int[] disk, int[] expectedCompactedDisk) {
         // Arrange & Act
         var compactedDisk = Day09.compact(disk);
 
         // Assert
-        assertEquals(expectedCompactedDisk, compactedDisk);
+        assertArrayEquals(expectedCompactedDisk, compactedDisk);
     }
 
     private static Stream<Arguments> shouldCompact() {
         return Stream.of(
-                Arguments.of("0..111....22222".chars().mapToObj(c -> c - '0').toList(), "022111222".chars().mapToObj(c -> c - '0').toList()),
-                Arguments.of("00...111...2...333.44.5555.6666.777.888899".chars().mapToObj(c -> c - '0').toList(), "0099811188827773336446555566".chars().mapToObj(c -> c - '0').toList())
+                Arguments.of(new int[] {0, -1, -1, 1, 1, 1, -1, -1, -1, -1, 2, 2, 2, 2, 2},
+                        new int[] {0, 2, 2, 1, 1, 1, 2, 2, 2}),
+                Arguments.of(new int[] {0, 0, -1, -1, -1, 1, 1, 1, -1, -1, -1, 2, -1, -1, -1, 3, 3, 3, -1, 4, 4, -1, 5, 5, 5, 5, -1, 6, 6, 6, 6, -1, 7, 7, 7, -1, 8, 8, 8, 8, 9, 9},
+                        new int[] {0, 0, 9, 9, 8, 1, 1, 1, 8, 8, 8, 2, 7, 7, 7, 3, 3, 3, 6, 4, 4, 6, 5, 5, 5, 5, 6, 6})
         );
     }
 
