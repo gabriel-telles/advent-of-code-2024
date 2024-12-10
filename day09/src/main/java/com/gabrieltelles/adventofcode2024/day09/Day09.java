@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 public class Day09 {
 
@@ -42,10 +40,10 @@ public class Day09 {
         return Arrays.copyOf(result, realLength);
     }
 
-    static long calculateChecksum(List<Integer> compactedDisk) {
+    static long calculateChecksum(int[] compactedDisk) {
         long checksum = 0;
-        for (int i = 0; i < compactedDisk.size(); i ++) {
-            checksum += (long) i * compactedDisk.get(i);
+        for (int i = 0; i < compactedDisk.length; i ++) {
+            checksum += (long) i * compactedDisk[i];
         }
         return checksum;
     }

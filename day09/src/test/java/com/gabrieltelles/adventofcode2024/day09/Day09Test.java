@@ -53,18 +53,18 @@ class Day09Test {
 
     @ParameterizedTest
     @MethodSource
-    void shouldCalculateChecksum(List<Integer> compactedDisk, long expectedChecksum) {
+    void shouldCalculateChecksum(int[] compactedDisk, long expectedChecksum) {
         // Arrange & Act
         var checksum = Day09.calculateChecksum(compactedDisk);
-
+        ;
         // Assert
         assertEquals(expectedChecksum, checksum);
     }
 
     private static Stream<Arguments> shouldCalculateChecksum() {
         return Stream.of(
-                Arguments.of("022111222".chars().mapToObj(c -> c - '0').toList(), 60L),
-                Arguments.of("0099811188827773336446555566".chars().mapToObj(c -> c - '0').toList(), 1928L)
+                Arguments.of("022111222".chars().map(Character::getNumericValue).toArray(), 60L),
+                Arguments.of("0099811188827773336446555566".chars().map(Character::getNumericValue).toArray(), 1928L)
         );
     }
 
