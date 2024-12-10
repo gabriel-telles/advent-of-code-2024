@@ -4,7 +4,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -14,21 +13,23 @@ class Day09Test {
     
     @ParameterizedTest
     @MethodSource
-    void shouldDecompressNotation(String path, List<Integer> expectedDecompressedNotation) {
+    void shouldGetDiskFromDiskMap(String path, int[] expectedDecompressedNotation) {
         // Arrange
-        String diskMap = Day09.loadDiskMap(path);
+        var diskMap = Day09.loadDiskMap(path);
 
         // Act
-        var actualDecompressedNotation = Day09.decompressNotation(diskMap);
+        var actualDecompressedNotation = Day09.getDiskFrom(diskMap);
 
         // Assert
-        assertEquals(expectedDecompressedNotation, actualDecompressedNotation);
+        assertArrayEquals(expectedDecompressedNotation, actualDecompressedNotation);
     }
 
-    private static Stream<Arguments> shouldDecompressNotation() {
+    private static Stream<Arguments> shouldGetDiskFromDiskMap() {
         return Stream.of(
-                Arguments.of("src/test/resources/testInput12345.txt", "0..111....22222".chars().mapToObj(c -> c - '0').toList()),
-                Arguments.of("src/test/resources/testInput2333133121414131402.txt", "00...111...2...333.44.5555.6666.777.888899".chars().mapToObj(c -> c - '0').toList())
+                Arguments.of("src/test/resources/testInput12345.txt",
+                        "0..111....22222".chars().map(Character::getNumericValue).toArray()),
+                Arguments.of("src/test/resources/testInput2333133121414131402.txt",
+                        "00...111...2...333.44.5555.6666.777.888899".chars().map(Character::getNumericValue).toArray())
         );
     }
 
@@ -56,7 +57,7 @@ class Day09Test {
     void shouldCalculateChecksum(int[] compactedDisk, long expectedChecksum) {
         // Arrange & Act
         var checksum = Day09.calculateChecksum(compactedDisk);
-        ;
+        
         // Assert
         assertEquals(expectedChecksum, checksum);
     }
