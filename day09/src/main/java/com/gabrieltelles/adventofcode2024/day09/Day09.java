@@ -67,58 +67,33 @@ public class Day09 {
 
     static int[] blockCompact(int[] disk) {
         int[] result = Arrays.copyOf(disk, disk.length);
-        int freeSpaceLeft = 0;
-        int freeSpaceRight = 0;
-        int blockRight = disk.length - 1;
-        int blockLeft = blockRight;
-        while (blockLeft > 0) {
-            while (result[blockRight] == FREE_SPACE) {
-                blockRight--;
-                blockLeft--;
-            }
-            while (result[blockLeft] == result[blockRight]) {
-                blockLeft--;
-            }
-            int blockSize = blockRight - blockLeft;
+        var diskBlockFinder = new DiskBlockFinder(result);
+        int[] block = diskBlockFinder.nextBlock();
+        int blockLeft;
+        int blockRight;
+        int[] end = new int[] {FREE_SPACE, FREE_SPACE};
+        while (!Arrays.equals(block, end)) {
+            blockLeft = block[0];
+            blockRight = block[1];
+            int blockLength = blockRight - blockLeft;
 
-            do {
-                freeSpaceRight = freeSpaceLeft;
-                do {
-                    freeSpaceLeft++;
-                    freeSpaceRight++;
+            var freeSpaceFinder = new FreeSpaceFinder(disk);
+            int[] freeSpace = freeSpaceFinder.nextFreeSpace();
+            int freeSpaceLeft;
+            int freeSpaceRight;
+            while (!Arrays.equals(freeSpace, end)) {
+                freeSpaceLeft = freeSpace[0];
+                freeSpaceRight = freeSpace[1];
+                int freeSpaceLength = freeSpaceRight - freeSpaceLeft;
+                if (blockLength <= freeSpaceLength) {
+
                 }
-                while (result[freeSpaceLeft] != FREE_SPACE);
-                while (result[freeSpaceRight] == FREE_SPACE) {
-                    freeSpaceRight++;
-                }
-            } while ((freeSpaceRight - freeSpaceLeft) < blockSize && freeSpaceRight < blockLeft);
-
-            int freeSpaceSize = freeSpaceRight - freeSpaceLeft;
-            if (freeSpaceSize >= blockSize) {
-                int blockValue = result[blockRight];
-                Arrays.fill(result, freeSpaceLeft, freeSpaceLeft + blockSize, blockValue);
-                Arrays.fill(result, blockLeft + 1, blockRight + 1, FREE_SPACE);
-
-                freeSpaceLeft = 0;
-                freeSpaceRight = 0;
+                freeSpace = freeSpaceFinder.nextFreeSpace();
             }
+
+            block = diskBlockFinder.nextBlock();
         }
         return result;
-    }
-
-    private static boolean getPreviousBlock(int[] disk, int blockLeft, int blockRight) {
-        boolean hasNotTriedThisBlock = true;
-        while (disk[blockRight] == FREE_SPACE && blockRight > 0 && hasNotTriedThisBlock) {
-            blockRight--;
-            blockLeft--;
-        }
-        while (disk[blockLeft] == disk[blockRight] && blockLeft > 0) {
-            blockLeft--;
-        }
-        if (blockLeft > 0) {
-
-        }
-        return true;
     }
 
     static long calculateChecksum(int[] compactedDisk) {
