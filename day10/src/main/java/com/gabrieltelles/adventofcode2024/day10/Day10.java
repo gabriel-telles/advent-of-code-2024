@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
 
 public class Day10 {
     private static final String INPUT_PATH = "day10/src/main/resources/input.txt";
@@ -16,6 +17,10 @@ public class Day10 {
             }
             System.out.println();
         }
+    }
+
+    static Set<Point> getTrailheads(int[][] topographicMap) {
+        return Set.of();
     }
 
     static int[][] loadMapFromPath(String path) {
