@@ -33,9 +33,16 @@ class Day10Test {
                 Arguments.of("oneTrailheadOf1.txt", Set.of(new Point(0, 3))),
                 Arguments.of("oneTrailheadOf4.txt", Set.of(new Point(0,3))),
                 Arguments.of("twoTrailheadsOf1And2.txt", Set.of(new Point(0,1), new Point(6, 5))),
-                Arguments.of("largeExample.txt", Set.of(new Point(0,1),
-                        new Point(0, 4), new Point(2,4), new Point(4, 6), new Point(5, 2),
-                        new Point(5, 5), new Point(6, 0), new Point(6, 6), new Point(7, 1)))
+                Arguments.of("largeExample.txt", Set.of(
+                        new Point(0,2),
+                        new Point(0,4),
+                        new Point(2,4),
+                        new Point(4,6),
+                        new Point(5,2),
+                        new Point(5,5),
+                        new Point(6,0),
+                        new Point(6,6),
+                        new Point(7,1)))
         );
     }
 
