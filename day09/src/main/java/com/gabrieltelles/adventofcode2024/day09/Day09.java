@@ -75,18 +75,22 @@ public class Day09 {
         while (!Arrays.equals(block, end)) {
             blockLeft = block[0];
             blockRight = block[1];
-            int blockLength = blockRight - blockLeft;
+            int blockLength = blockRight - blockLeft + 1;
 
-            var freeSpaceFinder = new FreeSpaceFinder(disk);
+            var freeSpaceFinder = new FreeSpaceFinder(result);
             int[] freeSpace = freeSpaceFinder.nextFreeSpace();
             int freeSpaceLeft;
             int freeSpaceRight;
-            while (!Arrays.equals(freeSpace, end)) {
+            boolean hasNotSwitchedYet = true;
+            while (!Arrays.equals(freeSpace, end) && hasNotSwitchedYet) {
                 freeSpaceLeft = freeSpace[0];
                 freeSpaceRight = freeSpace[1];
-                int freeSpaceLength = freeSpaceRight - freeSpaceLeft;
-                if (blockLength <= freeSpaceLength) {
-
+                int freeSpaceLength = freeSpaceRight - freeSpaceLeft + 1;
+                if (blockLength <= freeSpaceLength && freeSpaceRight <= blockLeft ) {
+                    int blockValue = result[blockLeft];
+                    Arrays.fill(result, freeSpaceLeft, freeSpaceLeft + blockLength, blockValue);
+                    Arrays.fill(result, blockLeft, blockLeft + blockLength, FREE_SPACE);
+                    hasNotSwitchedYet = false;
                 }
                 freeSpace = freeSpaceFinder.nextFreeSpace();
             }
