@@ -78,6 +78,31 @@ class Day10Test {
                 Arguments.of("largeExample.txt",new Point(6,6), 3),
                 Arguments.of("largeExample.txt",new Point(7,1), 5)
         );
+    }@ParameterizedTest
+    @MethodSource
+    void shouldGetRating(String fileName, Point trailhead, int expectedScore) {
+        // Arrange
+        int[][] topographicMap = Day10.loadMapFromPath(RESOURCES_DIR + fileName);
+
+        // Act
+        int score = Day10.rating(topographicMap, trailhead);
+
+        // Assert
+        Assertions.assertEquals(expectedScore, score);
+    }
+
+    private static Stream<Arguments> shouldGetRating() {
+        return Stream.of(
+                Arguments.of("largeExample.txt",new Point(0,2), 20),
+                Arguments.of("largeExample.txt",new Point(0,4), 24),
+                Arguments.of("largeExample.txt",new Point(2,4), 10),
+                Arguments.of("largeExample.txt",new Point(4,6), 4),
+                Arguments.of("largeExample.txt",new Point(5,2), 1),
+                Arguments.of("largeExample.txt",new Point(5,5), 4),
+                Arguments.of("largeExample.txt",new Point(6,0), 5),
+                Arguments.of("largeExample.txt",new Point(6,6), 8),
+                Arguments.of("largeExample.txt",new Point(7,1), 5)
+        );
     }
 
 }

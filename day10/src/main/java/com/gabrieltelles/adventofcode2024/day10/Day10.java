@@ -18,7 +18,29 @@ public class Day10 {
         for (Point trailhead : getTrailheads(topographicMap)) {
             sumOfScores += score(topographicMap, trailhead, new HashSet<>());
         }
-        System.out.println(sumOfScores);
+        System.out.println("Sum of scores: " + sumOfScores);
+        int sumOfRatings = 0;
+        for (Point trailhead : getTrailheads(topographicMap)) {
+            sumOfRatings += rating(topographicMap, trailhead);
+        }
+        System.out.println("Sum of ratings: " + sumOfRatings);
+    }
+
+    static int rating(int[][] map, Point p) {
+        if (isOutOfBounds(map,p))
+            return 0;
+
+        int height = map[p.row()][p.col()];
+        if (height == SUMMIT) {
+            return 1;
+        }
+
+        int neighborsTrailsToSummits = 0;
+        for (var neighbor : getNeighborsOf(p)) {
+            if (!isOutOfBounds(map, neighbor) && map[neighbor.row()][neighbor.col()] == height + 1)
+                neighborsTrailsToSummits += rating(map, neighbor);
+        }
+        return neighborsTrailsToSummits;
     }
 
     static int score(int[][] map, Point p, Set<Point> reachableSummits) {
