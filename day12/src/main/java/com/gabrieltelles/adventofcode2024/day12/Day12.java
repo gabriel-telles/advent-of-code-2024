@@ -3,7 +3,7 @@ package com.gabrieltelles.adventofcode2024.day12;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.*;
 
 public class Day12 {
     private static final String INPUT_PATH = "day12/src/main/resources/input.txt";
