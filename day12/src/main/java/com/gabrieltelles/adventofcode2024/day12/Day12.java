@@ -9,9 +9,12 @@ public class Day12 {
     private static final String INPUT_PATH = "day12/src/main/resources/input.txt";
 
     public static void main(String[] args) {
-        char[][] field = loadChar2DArrayFromPath(INPUT_PATH);
+        final char[][] field = loadChar2DArrayFromPath(INPUT_PATH);
         long price = calculateFencingPrice(field);
         System.out.println("Fencing price: " + price);
+
+        long discountedPrice = calculateFencingPriceWithDiscount(field);
+        System.out.println("Discounted fencing price: " + discountedPrice);
     }
 
     static long calculateFencingPrice(char[][] field) {
@@ -23,6 +26,21 @@ public class Day12 {
             totalPrice += area * perimeter;
         }
         return totalPrice;
+    }
+
+    static long calculateFencingPriceWithDiscount(char[][] field) {
+        Map<Point, Set<Point>> regions = groupRegions(field);
+        long totalPrice = 0L;
+        for (Set<Point> region : regions.values()) {
+            long area = calculateArea(region);
+            long numberOfSides = calculateNumberOfSides(region);
+            totalPrice += area * numberOfSides;
+        }
+        return totalPrice;
+    }
+
+    private static long calculateNumberOfSides(Set<Point> region) {
+        return 0;
     }
 
     private static long calculateArea(Set<Point> region) {

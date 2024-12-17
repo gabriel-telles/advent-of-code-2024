@@ -33,4 +33,17 @@ class Day12Test {
         // Assert
         assertEquals(expectedNumberOfRegions, regions.size());
     }
+
+    @ParameterizedTest
+    @CsvSource(value = {"example1.txt,80", "example2.txt,436", "example3.txt,1206", "example4.txt,236", "example5.txt,368"}, delimiter = ',')
+    void shouldCalculateFencingPriceWithDiscount(String filename, long expectedPrice) {
+        // Arrange
+        char[][] field = Day12.loadChar2DArrayFromPath(RESOURCES_DIR + filename);
+
+        // Act
+        long price = Day12.calculateFencingPriceWithDiscount(field);
+
+        // Assert
+        assertEquals(expectedPrice, price);
+    }
 }
