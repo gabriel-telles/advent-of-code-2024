@@ -15,11 +15,40 @@ public class Day12 {
     }
 
     static long calculateFencingPrice(char[][] field) {
-        Map<Point, List<Point>> regions = groupRegions(field);
-        return 0;
+        Map<Point, Set<Point>> regions = groupRegions(field);
+        long totalPrice = 0L;
+        for (Set<Point> region : regions.values()) {
+            long area = calculateArea(region);
+            long perimeter = calculatePerimeter(region);
+            totalPrice += area * perimeter;
+        }
+        return totalPrice;
     }
 
-    static Map<Point, List<Point>> groupRegions(char[][] field) {
+    private static long calculateArea(Set<Point> region) {
+        return region.size();
+    }
+
+    private static long calculatePerimeter(Set<Point> region) {
+        long perimeter = 0L;
+        for (Point p : region) {
+            if (!region.contains(new Point(p.row() + 1, p.col()))) {
+                perimeter++;
+            }
+            if (!region.contains(new Point(p.row() - 1, p.col()))) {
+                perimeter++;
+            }
+            if (!region.contains(new Point(p.row(), p.col() + 1))) {
+                perimeter++;
+            }
+            if (!region.contains(new Point(p.row(), p.col() - 1))) {
+                perimeter++;
+            }
+        }
+        return perimeter;
+    }
+
+    static Map<Point, Set<Point>> groupRegions(char[][] field) {
         UnionFind uf = new UnionFind();
         int rows = field.length;
         int cols = field[0].length;
@@ -38,11 +67,11 @@ public class Day12 {
             }
         }
 
-        Map<Point, List<Point>> regions = new HashMap<>();
+        Map<Point, Set<Point>> regions = new HashMap<>();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 Point root = uf.find(new Point(i, j));
-                regions.computeIfAbsent(root, k -> new ArrayList<>()).add(new Point(i, j));
+                regions.computeIfAbsent(root, k -> new HashSet<>()).add(new Point(i, j));
             }
         }
 
