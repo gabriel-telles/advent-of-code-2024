@@ -3,7 +3,7 @@ package com.gabrieltelles.adventofcode2024.day12;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day12Test {
     private static final String RESOURCES_DIR = "src/test/resources/";
@@ -19,5 +19,18 @@ class Day12Test {
 
         // Assert
         assertEquals(expectedPrice, price);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {"example1.txt,5", "example2.txt,5", "example3.txt,11"}, delimiter = ',')
+    void shouldFindRegions(String filename, int expectedNumberOfRegions) {
+        // Arrange
+        char[][] field = Day12.loadChar2DArrayFromPath(RESOURCES_DIR + filename);
+
+        // Act
+        var regions = Day12.groupRegions(field);
+
+        // Assert
+        assertEquals(expectedNumberOfRegions, regions.size());
     }
 }
