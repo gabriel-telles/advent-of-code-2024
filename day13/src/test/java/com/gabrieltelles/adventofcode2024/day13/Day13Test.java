@@ -14,10 +14,10 @@ class Day13Test {
         List<Machine> machines = Day13.loadMachinesFromPath("src/test/resources/example.txt");
 
         // Act
-        int tokensNeeded = Day13.calculateTokensNeeded(machines);
+        long tokensNeeded = Day13.calculateTokensNeeded(machines);
 
         // Assert
-        assertEquals(480, tokensNeeded);
+        assertEquals(480L, tokensNeeded);
     }
 
 }
