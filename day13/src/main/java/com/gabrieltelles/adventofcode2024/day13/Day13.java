@@ -11,6 +11,14 @@ public class Day13 {
         List<Machine> machines = loadMachinesFromPath("day13/src/main/resources/input.txt");
         long tokensNeeded = Day13.calculateTokensNeeded(machines);
         System.out.println("Fewest tokens needed to win all possible prizes: " + tokensNeeded);
+
+        List<Machine> modifiedMachines = new ArrayList<>();
+        long prizeModification = 10000000000000L;
+        for (var m : machines) {
+            modifiedMachines.add(new Machine(m.ax(), m.ay(), m.bx(), m.by(), m.prizeX() + prizeModification, m.prizeY() + prizeModification));
+        }
+        long tokensNeededModified = Day13.calculateTokensNeeded(modifiedMachines);
+        System.out.println("Fewest tokens needed to win all possible modified prizes: " + tokensNeededModified);
     }
 
     static long calculateTokensNeeded(List<Machine> machines) {
@@ -22,22 +30,17 @@ public class Day13 {
     }
 
     static long calculateTokensForMachine(Machine m) {
-        long maxA = Math.min(m.prizeX()/m.ax(), m.prizeY()/m.ay());
-        long maxB = Math.min(m.prizeX()/m.bx(), m.prizeY()/m.by());
-        long tokens = Long.MAX_VALUE;
+        // Let's view the machine as a 2x2 system of equations
+        long determinant = m.ax() * m.by() - m.ay() * m.bx();
+        if (determinant != 0) {
+            // guaranteed single solution
+            long a = (m.prizeX() * m.by() - m.prizeY() * m.bx()) / determinant;
+            long b = (m.prizeY() * m.ax() - m.prizeX() * m.ay()) / determinant;
 
-        for (long a = maxA; a >= 0; a--) {
-            long b = 0;
-            while (a * m.ax() + b * m.bx() <= m.prizeX() && a * m.ay() + b * m.by() <= m.prizeY() && b <= maxB) {
-                if (winsPrize(a, b, m) && calculateTokens(a, b) < tokens) {
-                    tokens = calculateTokens(a, b);
-                    break;
-                }
-                b++;
-            }
-
+            return winsPrize(a, b, m) ? calculateTokens(a, b) : 0;
+        } else {
+            return 0;
         }
-        return (tokens == Long.MAX_VALUE) ? 0L : tokens;
     }
 
     private static boolean winsPrize(long buttonsA, long buttonsB, Machine m) {
